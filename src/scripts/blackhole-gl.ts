@@ -1,19 +1,25 @@
 // Agujero negro con lente gravitacional real: por cada pixel se integra la
 // trayectoria del rayo con acc = -1.5·h²·pos/r⁵ (geodésica nula aproximada,
 // Schwarzschild con r_s = 1). El disco emite en cada cruce del plano y=0.
+// Full-bleed: el canvas llena el hero; u_center compone el agujero y u_look
+// aplica parallax de cámara con el puntero.
 export function initBlackHoleGL(canvas: HTMLCanvasElement): boolean {
   const gl = canvas.getContext('webgl', { antialias: false, alpha: true, premultipliedAlpha: true });
   if (!gl) return false;
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const finePointer = window.matchMedia('(pointer: fine)').matches;
   const mobile = window.innerWidth < 720;
   const STEPS = mobile ? 110 : 170;
-  const SCALE = Math.min(window.devicePixelRatio || 1, 1.5) * (mobile ? 0.75 : 1);
+  const SCALE = Math.min(window.devicePixelRatio || 1, 1.5) * (mobile ? 0.6 : 0.55);
 
   const vsSrc = 'attribute vec2 p; void main(){ gl_Position = vec4(p, 0.0, 1.0); }';
   const fsSrc = `
 precision highp float;
 uniform vec2 u_res;
 uniform float u_time;
+uniform vec2 u_center;
+uniform vec2 u_look;
+uniform float u_zoom;
 #define STEPS ${STEPS}
 
 float hash(vec3 p) { p = fract(p * 0.3183099 + 0.1); p *= 17.0; return fract(p.x * p.y * p.z * (p.x + p.y + p.z)); }
@@ -49,8 +55,8 @@ vec3 diskColor(vec3 pos, vec3 rd) {
 }
 
 void main() {
-  vec2 uv = (gl_FragCoord.xy - 0.5 * u_res) / u_res.y;
-  vec3 ro = vec3(0.0, 1.6, -20.0);
+  vec2 uv = (gl_FragCoord.xy - u_center * u_res) / u_res.y * u_zoom;
+  vec3 ro = vec3(u_look.x * 3.0, 1.6 + u_look.y * 1.2, -20.0);
   vec3 fw = normalize(-ro);
   vec3 rt = normalize(cross(vec3(0.0, 1.0, 0.0), fw));
   vec3 up = cross(fw, rt);
@@ -86,8 +92,8 @@ void main() {
   col += vec3(1.0, 0.72, 0.4) * glow * 1.1;
   col = col / (1.0 + col);
   col = pow(col, vec3(0.4545));
-  // Vignette radial: funde hacia transparente antes del borde del canvas
-  float vig = smoothstep(0.62, 0.44, length(uv));
+  // Vignette centrado en el agujero: funde a transparente hacia los bordes
+  float vig = smoothstep(1.15, 0.6, length(uv));
   col *= vig;
   float alpha = clamp(max(max(col.r, col.g), col.b) * 1.6, 0.0, 1.0) * vig;
   gl_FragColor = vec4(col, alpha);
@@ -128,27 +134,51 @@ void main() {
 
   const uRes = gl.getUniformLocation(prog, 'u_res');
   const uTime = gl.getUniformLocation(prog, 'u_time');
+  const uCenter = gl.getUniformLocation(prog, 'u_center');
+  const uLook = gl.getUniformLocation(prog, 'u_look');
+  const uZoom = gl.getUniformLocation(prog, 'u_zoom');
 
-  const size = Math.round(520 * SCALE);
-  canvas.width = size;
-  canvas.height = size;
-  gl.viewport(0, 0, size, size);
-  gl.uniform2f(uRes, size, size);
+  // Parallax: objetivo desde el puntero, aplicado con lerp por frame
+  let lookX = 0, lookY = 0, targetX = 0, targetY = 0;
+  if (finePointer && !reduced) {
+    window.addEventListener('pointermove', (e) => {
+      targetX = e.clientX / window.innerWidth - 0.5;
+      targetY = e.clientY / window.innerHeight - 0.5;
+    }, { passive: true });
+  }
+
+  function resize() {
+    const cw = Math.max(1, canvas.clientWidth);
+    const ch = Math.max(1, canvas.clientHeight);
+    canvas.width = Math.max(1, Math.round(cw * SCALE));
+    canvas.height = Math.max(1, Math.round(ch * SCALE));
+    gl!.viewport(0, 0, canvas.width, canvas.height);
+    gl!.uniform2f(uRes, canvas.width, canvas.height);
+    const narrow = window.innerWidth < 720;
+    gl!.uniform2f(uCenter, narrow ? 0.5 : 0.66, narrow ? 0.58 : 0.5); // GL y invertida: 0.58 ≈ 42% desde arriba
+    gl!.uniform1f(uZoom, narrow ? 1.35 : 1.0);
+    if (reduced) {
+      gl!.uniform2f(uLook, 0, 0);
+      gl!.uniform1f(uTime, 4.0);
+      gl!.drawArrays(gl!.TRIANGLES, 0, 3);
+    }
+  }
 
   let raf = 0, running = false;
   const t0 = performance.now();
 
   function frame(now: number) {
+    lookX += (targetX - lookX) * 0.05;
+    lookY += (targetY - lookY) * 0.05;
+    gl!.uniform2f(uLook, lookX, lookY);
     gl!.uniform1f(uTime, (now - t0) / 1000);
     gl!.drawArrays(gl!.TRIANGLES, 0, 3);
     raf = requestAnimationFrame(frame);
   }
 
-  if (reduced) {
-    gl.uniform1f(uTime, 4.0);
-    gl.drawArrays(gl.TRIANGLES, 0, 3);
-    return true;
-  }
+  window.addEventListener('resize', resize);
+  resize();
+  if (reduced) return true;
 
   const io = new IntersectionObserver(([e]) => {
     const want = !!e && e.isIntersecting && !document.hidden;
