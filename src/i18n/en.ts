@@ -70,7 +70,7 @@ export const en: Dict = {
   },
   projects: {
     heading: 'Projects',
-    privateNote: 'Private company code — described without repository links.',
+    privateNote: 'Private code — personal and professional projects.',
     featured: {
       name: 'Spot — Ticketing with invisible blockchain',
       description:
@@ -102,9 +102,10 @@ export const en: Dict = {
   skills: {
     heading: 'Skills',
     groups: [
-      { label: 'Frontend', items: ['React', 'Angular'] },
-      { label: 'Backend', items: ['FastAPI', 'Node.js', 'Spring Boot', 'Flask', 'AWS Lambda'] },
-      { label: 'Databases', items: ['SQL', 'NoSQL', 'Key-value'] },
+      { label: 'Frontend', items: ['React', 'Angular', 'Next.js', 'Expo / React Native'] },
+      { label: 'Backend', items: ['FastAPI', 'NestJS', 'Node.js', 'Spring Boot', 'Flask'] },
+      { label: 'Databases', items: ['MySQL', 'Supabase', 'PostgreSQL', 'MongoDB', 'Firebase', 'Redis'] },
+      { label: 'DevOps', items: ['GitHub Actions', 'GitLab CI/CD', 'Bitbucket CI/CD', 'VPS'] },
       { label: 'Cloud (AWS)', items: ['EC2', 'S3', 'Lambda', 'Glue'] },
     ],
   },
@@ -117,7 +118,7 @@ export const en: Dict = {
   footer: {
     heading: 'Contact',
     blurb: 'A project, an opportunity, or just talking software and space? Reach out.',
-    email: 'bsalamanca159@hotmail.com',
+    email: 'b.salamanca01@ufromail.cl',
     github: 'https://github.com/Ztellar',
     linkedin: 'https://www.linkedin.com/in/benjaminsalamanca/',
     cv: 'Download CV',
