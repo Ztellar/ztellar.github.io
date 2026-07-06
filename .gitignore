@@ -1,0 +1,8 @@
+# Privacidad: el CV original contiene RUT/teléfono/fecha de nacimiento
+*.pdf
+!public/**/*.pdf
+
+# Dependencias y build
+node_modules/
+dist/
+.astro/
