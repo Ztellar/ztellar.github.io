@@ -1,0 +1,39 @@
+---
+import { getDict } from '../i18n';
+const d = getDict('es');
+---
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="robots" content="noindex" />
+  <title>CV — {d.hero.name}</title>
+  <style>
+    body { font-family: 'Segoe UI', system-ui, sans-serif; color: #111; background: #fff; max-width: 48rem; margin: 2rem auto; padding: 0 1.5rem; line-height: 1.5; font-size: 0.95rem; }
+    h1 { margin: 0; font-size: 1.8rem; }
+    h2 { font-size: 1.1rem; border-bottom: 1px solid #999; padding-bottom: 0.2rem; margin-top: 1.6rem; }
+    .contact { color: #444; margin-top: 0.3rem; }
+    .job { margin-bottom: 0.9rem; }
+    .head { display: flex; justify-content: space-between; font-weight: 600; }
+    .period { font-weight: 400; color: #555; }
+    ul { margin: 0.3rem 0; padding-left: 1.2rem; }
+    @media print { body { margin: 0; } }
+  </style>
+</head>
+<body>
+  <h1>{d.hero.name}</h1>
+  <p class="contact">{d.footer.email} · github.com/Ztellar · linkedin.com/in/benjaminsalamanca · {d.hero.kicker}</p>
+  <p>{d.hero.title}. {d.hero.eso}.</p>
+  <h2>{d.experience.heading}</h2>
+  {d.experience.items.map((j) => (
+    <div class="job">
+      <div class="head"><span>{j.role} — {j.company}</span><span class="period">{j.period}</span></div>
+      <ul>{j.bullets.map((b) => <li>{b}</li>)}</ul>
+    </div>
+  ))}
+  <h2>{d.skills.heading}</h2>
+  {d.skills.groups.map((g) => <p><strong>{g.label}:</strong> {g.items.join(', ')}</p>)}
+  <h2>{d.education.heading}</h2>
+  <p>{d.education.degree}, {d.education.school} ({d.education.period})</p>
+</body>
+</html>

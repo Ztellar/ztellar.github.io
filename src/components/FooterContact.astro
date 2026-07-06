@@ -10,6 +10,7 @@ const { dict } = Astro.props;
     <a class="btn" href={`mailto:${dict.footer.email}`}>{dict.footer.email}</a>
     <a class="btn" href={dict.footer.github} rel="me noopener">GitHub</a>
     <a class="btn" href={dict.footer.linkedin} rel="me noopener">LinkedIn</a>
+    <a class="btn" href="/cv/benjamin-salamanca-cv.pdf" download>{dict.footer.cv}</a>
   </div>
   <footer class="mono">{dict.footer.builtWith}</footer>
 </section>
