@@ -11,6 +11,7 @@ export interface ProjectItem {
   description: string;
   context: string;
   stack: string[];
+  url?: string;
 }
 
 export interface Dict {

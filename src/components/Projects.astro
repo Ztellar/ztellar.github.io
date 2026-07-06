@@ -6,12 +6,12 @@ const { dict } = Astro.props;
 <section id="projects">
   <h2 data-obj="M42 · STELLAR NURSERY">{dict.projects.heading}</h2>
   <p class="mono">{dict.projects.privateNote}</p>
-  <article class="card featured">
+  <a href={dict.projects.featured.url} target="_blank" rel="noopener noreferrer" class="card featured">
     <h3>{dict.projects.featured.name}</h3>
     <p class="mono">{dict.projects.featured.context}</p>
     <p>{dict.projects.featured.description}</p>
     <div>{dict.projects.featured.stack.map((s) => <span class="chip">{s}</span>)}</div>
-  </article>
+  </a>
   <div class="grid">
     {dict.projects.items.map((p) => (
       <article class="card">
@@ -27,10 +27,18 @@ const { dict } = Astro.props;
 <style>
   .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1.2rem; margin-top: 1.5rem; }
   h3 { color: var(--accent); font-size: 1.15rem; }
-  .featured {
+  a.featured {
+    display: block;
     margin-top: 1.5rem;
     border-color: color-mix(in srgb, var(--accent) 55%, transparent);
     box-shadow: 0 0 28px rgba(255, 158, 79, 0.12);
+    text-decoration: none;
+    color: inherit;
+    transition: box-shadow 0.25s, border-color 0.25s;
+  }
+  a.featured:hover {
+    box-shadow: 0 0 42px rgba(255, 158, 79, 0.22);
+    border-color: var(--accent);
   }
   .featured h3 { font-size: 1.3rem; }
 </style>
