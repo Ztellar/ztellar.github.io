@@ -72,9 +72,9 @@ export const en: Dict = {
     heading: 'Projects',
     privateNote: 'Private code — personal and professional projects.',
     featured: {
-      name: 'Spot — Ticketing with invisible blockchain',
+      name: 'Spot Ticket',
       description:
-        'Ticketing platform where every ticket is a Solana cNFT without users ever touching crypto: traditional login and auto-generated custodial wallets. Anti-counterfeiting, resale capped at +20% with automatic royalties for organizers and artists, NFC "tap to enter" access and offline validation.',
+        'Ticketing platform where every ticket is a Solana cNFT: anti-counterfeiting, regulated resale, NFC tap-to-enter, offline validation, fan clubs, higher revenue for artists.',
       context: 'Personal project · MVP in controlled pilots · TICSUR 2026, Temuco',
       stack: ['Next.js', 'NestJS', 'TypeScript', 'PostgreSQL', 'Redis', 'Solana cNFTs', 'Expo / React Native', 'NFC'],
       url: 'https://spoticket.cl',
@@ -89,13 +89,13 @@ export const en: Dict = {
       {
         name: 'CTR metrics platform',
         description: "Internal system for metrics tracking, overtime accounting and receipts, used by two of the company's business processes.",
-        context: 'CTR · internship',
+        context: 'CTR · university internship 2',
         stack: ['Angular', 'Spring Boot', 'Bitbucket', 'VPS'],
       },
       {
         name: 'Llico data pipeline',
         description: 'Data Warehouse with ETL (AWS + Spark) feeding a high-granularity visualization platform for a unified fleet alert system.',
-        context: 'Transportes Llico · internship',
+        context: 'Transportes Llico · university internship 1',
         stack: ['AWS', 'Spark', 'GitLab', 'Data Warehouse'],
       },
     ],
