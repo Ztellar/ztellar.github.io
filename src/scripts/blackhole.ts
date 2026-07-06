@@ -1,7 +1,4 @@
-const canvas = document.getElementById('blackhole') as HTMLCanvasElement | null;
-if (canvas) init(canvas);
-
-function init(canvas: HTMLCanvasElement) {
+export function initBlackHole2D(canvas: HTMLCanvasElement) {
   const ctx = canvas.getContext('2d')!;
   const S = canvas.width; // lienzo cuadrado, coordenadas fijas
   const C = S / 2;
