@@ -89,13 +89,13 @@ export const en: Dict = {
       {
         name: 'CTR metrics platform',
         description: "Internal system for metrics tracking, overtime accounting and receipts, used by two of the company's business processes.",
-        context: 'CTR · university internship 2',
+        context: 'CTR · internship',
         stack: ['Angular', 'Spring Boot', 'Bitbucket', 'VPS'],
       },
       {
         name: 'Llico data pipeline',
         description: 'Data Warehouse with ETL (AWS + Spark) feeding a high-granularity visualization platform for a unified fleet alert system.',
-        context: 'Transportes Llico · university internship 1',
+        context: 'Transportes Llico · internship',
         stack: ['AWS', 'Spark', 'GitLab', 'Data Warehouse'],
       },
     ],
