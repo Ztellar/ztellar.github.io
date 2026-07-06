@@ -71,6 +71,13 @@ export const en: Dict = {
   projects: {
     heading: 'Projects',
     privateNote: 'Private company code — described without repository links.',
+    featured: {
+      name: 'Spot — Ticketing with invisible blockchain',
+      description:
+        'Ticketing platform where every ticket is a Solana cNFT without users ever touching crypto: traditional login and auto-generated custodial wallets. Anti-counterfeiting, resale capped at +20% with automatic royalties for organizers and artists, NFC "tap to enter" access and offline validation.',
+      context: 'Personal project · MVP in controlled pilots · TICSUR 2026, Temuco',
+      stack: ['Next.js', 'NestJS', 'TypeScript', 'PostgreSQL', 'Redis', 'Solana cNFTs', 'Expo / React Native', 'NFC'],
+    },
     items: [
       {
         name: '3tiz',

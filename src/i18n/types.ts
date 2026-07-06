@@ -28,7 +28,7 @@ export interface Dict {
   };
   about: { heading: string; p1: string; p2: string; p3: string };
   experience: { heading: string; items: ExperienceItem[] };
-  projects: { heading: string; privateNote: string; items: ProjectItem[] };
+  projects: { heading: string; privateNote: string; featured: ProjectItem; items: ProjectItem[] };
   skills: { heading: string; groups: { label: string; items: string[] }[] };
   education: { heading: string; degree: string; school: string; period: string };
   footer: { heading: string; blurb: string; email: string; github: string; linkedin: string; cv: string; builtWith: string };
