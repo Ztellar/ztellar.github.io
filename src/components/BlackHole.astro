@@ -1,10 +1,12 @@
-<div class="bh-wrap" aria-hidden="true">
-  <canvas id="blackhole" width="520" height="520"></canvas>
-</div>
+<figure class="bh-wrap">
+  <canvas id="blackhole" width="520" height="520" aria-hidden="true"></canvas>
+  <figcaption class="mono">Sgr A* · 17h 45m 40s · −29° 00′ 28″</figcaption>
+</figure>
 <script src="../scripts/blackhole.ts"></script>
 
 <style>
-  .bh-wrap { display: grid; place-items: center; }
+  .bh-wrap { display: grid; place-items: center; margin: 0; gap: 0.4rem; }
+  figcaption { font-size: 0.72rem; letter-spacing: 0.12em; opacity: 0.8; }
   canvas {
     width: min(70vw, 26rem);
     height: auto;

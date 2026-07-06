@@ -4,7 +4,7 @@ interface Props { dict: Dict }
 const { dict } = Astro.props;
 ---
 <section id="experience">
-  <h2>{dict.experience.heading}</h2>
+  <h2 data-obj="PSR B1919+21 · PULSAR">{dict.experience.heading}</h2>
   <ol class="timeline">
     {dict.experience.items.map((job) => (
       <li>

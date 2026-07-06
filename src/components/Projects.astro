@@ -4,7 +4,7 @@ interface Props { dict: Dict }
 const { dict } = Astro.props;
 ---
 <section id="projects">
-  <h2>{dict.projects.heading}</h2>
+  <h2 data-obj="M42 · STELLAR NURSERY">{dict.projects.heading}</h2>
   <p class="mono">{dict.projects.privateNote}</p>
   <div class="grid">
     {dict.projects.items.map((p) => (

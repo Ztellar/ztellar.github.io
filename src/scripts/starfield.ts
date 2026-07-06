@@ -7,17 +7,20 @@ if (canvas) init(canvas);
 
 function init(canvas: HTMLCanvasElement) {
   const ctx = canvas.getContext('2d')!;
-  const stars = starsData as Star[];
+  const allStars = starsData as Star[];
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let stars = allStars;
   let w = 0, h = 0, dpr = 1, raf = 0;
   const t0 = performance.now();
 
   // Fase de parpadeo estable por estrella (determinista, sin estado extra)
-  const phase = stars.map((_, i) => (i * 2.399963) % (Math.PI * 2)); // ángulo áureo
+  const phase = allStars.map((_, i) => (i * 2.399963) % (Math.PI * 2)); // ángulo áureo
 
   function resize() {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
     w = window.innerWidth; h = window.innerHeight;
+    // En pantallas angostas dibujar solo estrellas brillantes (rendimiento)
+    stars = w < 720 ? allStars.filter((s) => s.m < 4) : allStars;
     canvas.width = w * dpr; canvas.height = h * dpr;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     if (reduced) draw(0);

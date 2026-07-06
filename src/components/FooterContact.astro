@@ -4,7 +4,7 @@ interface Props { dict: Dict }
 const { dict } = Astro.props;
 ---
 <section id="contact">
-  <h2>{dict.footer.heading}</h2>
+  <h2 data-obj="VOYAGER 1 · INTERSTELLAR">{dict.footer.heading}</h2>
   <p>{dict.footer.blurb}</p>
   <div class="links">
     <a class="btn" href={`mailto:${dict.footer.email}`}>{dict.footer.email}</a>
@@ -17,7 +17,5 @@ const { dict } = Astro.props;
 
 <style>
   .links { display: flex; gap: 0.8rem; flex-wrap: wrap; margin: 1.5rem 0 3rem; }
-  .btn { padding: 0.6rem 1.2rem; border: 1px solid var(--line); border-radius: 8px; text-decoration: none; color: var(--ink); }
-  .btn:hover { border-color: var(--accent-2); }
   footer { padding-bottom: 2rem; color: var(--ink-dim); }
 </style>
