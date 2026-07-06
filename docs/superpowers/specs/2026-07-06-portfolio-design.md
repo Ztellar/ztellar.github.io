@@ -27,7 +27,6 @@ Portfolio personal bilingüe (ES/EN) publicado en GitHub Pages en `https://ztell
    - ESO — Práctica (próximamente; fechas y rol por confirmar con el usuario antes de publicar detalles).
 4. **Proyectos (tarjetas):**
    - Laborales, sin enlace a código (privado): 3tiz, plataforma CTR, pipeline de datos Llico. Cada tarjeta: descripción, stack, contexto.
-   - Repos públicos con enlace: `perceptron` (Python), `shamir` (Python), `Codigos-Mustakis` (C++).
 5. **Habilidades:** Frontend (React, Angular), Backend (FastAPI, Node.js, Spring Boot, Flask, AWS Lambda), Bases de datos (SQL, NoSQL, clave-valor), Cloud (AWS: EC2, S3, Lambda, Glue).
 6. **Educación:** Ingeniería Civil Informática, Universidad de La Frontera (2021 – actualidad).
 7. **Footer/contacto:** email, GitHub, LinkedIn, toggle de idioma repetido.
