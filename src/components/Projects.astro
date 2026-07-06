@@ -1,0 +1,24 @@
+---
+import type { Dict } from '../i18n';
+interface Props { dict: Dict }
+const { dict } = Astro.props;
+---
+<section id="projects">
+  <h2>{dict.projects.heading}</h2>
+  <p class="mono">{dict.projects.privateNote}</p>
+  <div class="grid">
+    {dict.projects.items.map((p) => (
+      <article class="card">
+        <h3>{p.name}</h3>
+        <p class="mono">{p.context}</p>
+        <p>{p.description}</p>
+        <div>{p.stack.map((s) => <span class="chip">{s}</span>)}</div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1.2rem; margin-top: 1.5rem; }
+  h3 { color: var(--accent); font-size: 1.15rem; }
+</style>

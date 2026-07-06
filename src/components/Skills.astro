@@ -1,0 +1,26 @@
+---
+import type { Dict } from '../i18n';
+interface Props { dict: Dict }
+const { dict } = Astro.props;
+---
+<section id="skills">
+  <h2>{dict.skills.heading}</h2>
+  <div class="grid">
+    {dict.skills.groups.map((g) => (
+      <div class="card">
+        <h3 class="mono">{g.label}</h3>
+        <div>{g.items.map((s) => <span class="chip">{s}</span>)}</div>
+      </div>
+    ))}
+  </div>
+  <p class="edu">
+    <span class="mono">{dict.education.heading}:</span>
+    {dict.education.degree} — {dict.education.school} <span class="mono">({dict.education.period})</span>
+  </p>
+</section>
+
+<style>
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: 1.2rem; }
+  h3 { color: var(--accent-2); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.08em; }
+  .edu { margin-top: 2rem; }
+</style>

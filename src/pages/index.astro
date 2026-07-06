@@ -1,8 +1,5 @@
 ---
-import Base from '../layouts/Base.astro';
+import Home from '../components/Home.astro';
 import { getDict } from '../i18n';
-const dict = getDict('es');
 ---
-<Base dict={dict}>
-  <section><h2>{dict.about.heading}</h2><p>{dict.about.p1}</p></section>
-</Base>
+<Home dict={getDict('es')} />
