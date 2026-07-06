@@ -20,7 +20,7 @@ export const es: Dict = {
   about: {
     heading: 'Sobre mí',
     p1: 'Soy desarrollador full-stack y estudiante de Ingeniería Civil Informática en la Universidad de La Frontera. He construido plataformas web completas —del pipeline de datos al frontend— en empresas de transporte, retail y software.',
-    p2: 'Desde 2022 soy mentor de la Fundación Mustakis, enseñando robótica educativa y creación de videojuegos (Scratch y Roblox Studio) a estudiantes de 7° básico a 3° medio.',
+    p2: 'Desde 2022 hasta 2026 fuí mentor de la Fundación Mustakis, enseñando robótica educativa y creación de videojuegos (Scratch y Roblox Studio) a estudiantes de 7° básico a 3° medio.',
     p3: 'Pronto haré mi práctica en el European Southern Observatory: el cruce entre software y astronomía es exactamente el tipo de problema que me motiva — este sitio, con su cielo de estrellas reales, es un adelanto.',
   },
   experience: {
@@ -60,7 +60,7 @@ export const es: Dict = {
       {
         role: 'Mentor',
         company: 'Fundación Mustakis',
-        period: '2022 — Actualidad',
+        period: '2022 — 2026',
         bullets: [
           'Docente de talleres de robótica educativa y creación de videojuegos (Scratch y Roblox Studio) para estudiantes de 7° básico a 3° medio.',
         ],

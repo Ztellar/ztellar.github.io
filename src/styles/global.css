@@ -1,6 +1,6 @@
 :root {
-  --bg: #05070f;
-  --bg-soft: #0b1020;
+  --bg: #000000;
+  --bg-soft: #0a0f1e;
   --ink: #e8ecf4;
   --ink-dim: #9aa5bd;
   --accent: #ff9e4f;
@@ -11,7 +11,7 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; overflow-x: clip; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }

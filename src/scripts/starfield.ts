@@ -37,7 +37,7 @@ function init(canvas: HTMLCanvasElement) {
     g.rotate(-0.35);
     const band = g.createLinearGradient(0, -h * 0.28, 0, h * 0.28);
     band.addColorStop(0, 'rgba(26,37,80,0)');
-    band.addColorStop(0.5, 'rgba(60,72,120,0.16)');
+    band.addColorStop(0.5, 'rgba(60,72,120,0.12)');
     band.addColorStop(1, 'rgba(26,37,80,0)');
     g.fillStyle = band;
     g.fillRect(-w, -h, w * 2, h * 2);
@@ -48,7 +48,7 @@ function init(canvas: HTMLCanvasElement) {
       const x = rand() * w, y = rand() * h;
       const r = (0.08 + rand() * 0.22) * Math.max(w, h);
       const col = palettes[Math.floor(rand() * palettes.length)]!;
-      const a = 0.05 + rand() * 0.09;
+      const a = 0.04 + rand() * 0.07;
       const rg = g.createRadialGradient(x, y, 0, x, y, r);
       rg.addColorStop(0, `rgba(${col},${a})`);
       rg.addColorStop(1, `rgba(${col},0)`);

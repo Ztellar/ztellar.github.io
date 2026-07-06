@@ -20,7 +20,7 @@ export const en: Dict = {
   about: {
     heading: 'About me',
     p1: 'I am a full-stack developer and Computer Science Engineering student at Universidad de La Frontera, Chile. I have built complete web platforms — from data pipelines to frontends — for transport, retail and software companies.',
-    p2: 'Since 2022 I have been a mentor at Fundación Mustakis, teaching educational robotics and game development (Scratch and Roblox Studio) to middle and high school students.',
+    p2: 'From 2022 to 2026 I was a mentor at Fundación Mustakis, teaching educational robotics and game development (Scratch and Roblox Studio) to middle and high school students.',
     p3: 'I will soon join the European Southern Observatory as an intern: the intersection of software and astronomy is exactly the kind of problem that drives me — this site, with its sky of real stars, is a preview.',
   },
   experience: {
@@ -60,9 +60,9 @@ export const en: Dict = {
       {
         role: 'Mentor',
         company: 'Fundación Mustakis',
-        period: '2022 — Present',
+        period: '2022 — 2026',
         bullets: [
-          'Teaching educational robotics and game development workshops (Scratch and Roblox Studio) to students from 7th grade to high school.',
+          'Taught educational robotics and game development workshops (Scratch and Roblox Studio) to students from 7th grade to high school.',
         ],
         stack: ['Educational robotics', 'Scratch', 'Roblox Studio'],
       },
