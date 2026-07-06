@@ -1,4 +1,8 @@
 ---
+import Base from '../layouts/Base.astro';
+import { getDict } from '../i18n';
+const dict = getDict('es');
 ---
-<html lang="es"><head><meta charset="utf-8" /><title>Benjamín Salamanca</title></head>
-<body><h1>WIP</h1></body></html>
+<Base dict={dict}>
+  <section><h2>{dict.about.heading}</h2><p>{dict.about.p1}</p></section>
+</Base>

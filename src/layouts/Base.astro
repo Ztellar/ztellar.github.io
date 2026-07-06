@@ -1,0 +1,23 @@
+---
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import type { Dict } from '../i18n';
+interface Props { dict: Dict }
+const { dict } = Astro.props;
+---
+<!doctype html>
+<html lang={dict.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={dict.meta.description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{dict.meta.title}</title>
+  </head>
+  <body>
+    <canvas id="starfield" aria-hidden="true"></canvas>
+    <Nav dict={dict} />
+    <main><slot /></main>
+    <script src="../scripts/starfield.ts"></script>
+  </body>
+</html>
