@@ -1,0 +1,45 @@
+---
+// Mapa de navegación: constelaciones alrededor del agujero negro, cada una abre una sección.
+// Las posiciones las calcula src/scripts/skymap.ts según el estado del agujero (scroll).
+import ConstellationGlyph from './ConstellationGlyph.astro';
+import { constellations } from '../data/constellations';
+import type { Dict } from '../i18n';
+interface Props { dict: Dict }
+const { dict } = Astro.props;
+---
+<nav class="skymap" aria-label={dict.skymap.ariaLabel} data-skymap>
+  {constellations.map((c) => (
+    <a class="const" href={`#${c.section}`} data-key={c.key} data-section={c.section}>
+      <ConstellationGlyph k={c.key} />
+      <span class="label">
+        <span class="sec">{dict.nav[c.section]}</span>
+        <span class="name mono">{c.name}</span>
+      </span>
+    </a>
+  ))}
+</nav>
+
+<style>
+  .skymap { position: fixed; inset: 0; z-index: 5; pointer-events: none; }
+  .const {
+    position: absolute; left: 0; top: 0; width: 7.5rem;
+    display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
+    text-decoration: none; color: var(--ink-dim); pointer-events: auto;
+    opacity: 0; visibility: hidden; /* el script los muestra cuando los ubica */
+    will-change: transform, opacity;
+    border-radius: 12px; padding: 0.4rem;
+  }
+  .const :global(.glyph) { width: 100%; height: auto; overflow: visible; }
+  .const :global(.glyph line) { stroke: rgba(217, 192, 138, 0.45); stroke-width: 0.012; transition: stroke 0.25s; }
+  .const :global(.glyph .star) { fill: #f3ead6; transition: fill 0.25s; }
+  .const :global(.glyph .star.main) { fill: #fff; filter: drop-shadow(0 0 0.04px #cfe3ff); }
+  .const :global(.glyph .halo) { fill: none; stroke: rgba(207, 227, 255, 0.5); stroke-width: 0.01; }
+  .label { display: flex; flex-direction: column; align-items: center; line-height: 1.25; text-align: center; }
+  .sec { font-size: 0.85rem; color: var(--ink); text-shadow: 0 1px 10px #000; }
+  .name { font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.75; }
+  .const:hover :global(.glyph line), .const:focus-visible :global(.glyph line), .const[aria-current='true'] :global(.glyph line) { stroke: rgba(255, 196, 120, 0.95); }
+  .const:hover :global(.glyph .star), .const:focus-visible :global(.glyph .star), .const[aria-current='true'] :global(.glyph .star) { fill: #ffd9a8; }
+  .const:hover .sec, .const[aria-current='true'] .sec { color: var(--accent); }
+  .const:hover :global(.glyph), .const:focus-visible :global(.glyph) { filter: drop-shadow(0 0 6px rgba(255, 170, 90, 0.6)); }
+  @media (max-width: 719px) { .skymap { display: none; } }
+</style>

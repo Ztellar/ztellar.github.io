@@ -9,6 +9,10 @@ export const es: Dict = {
   },
   nav: { story: 'Historia', work: 'Trabajo', offline: 'Fuera del código', contact: 'Contacto', cv: 'CV' },
   langSwitch: { otherPath: '/en/', otherLabel: 'EN', ariaLabel: 'Switch to English' },
+  skymap: {
+    ariaLabel: 'Mapa de constelaciones: cada una lleva a una sección',
+    hint: 'Cada constelación alrededor del agujero negro abre una sección.',
+  },
   hero: {
     kicker: 'Temuco → Paranal · Chile',
     name: 'Benjamín Salamanca',

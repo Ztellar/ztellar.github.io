@@ -23,9 +23,10 @@ const { dict } = Astro.props;
   </head>
   <body>
     <canvas id="starfield" aria-hidden="true"></canvas>
+    <canvas id="blackhole" aria-hidden="true"></canvas>
     <Nav dict={dict} />
     <main><slot /></main>
-    <script src="../scripts/starfield.ts"></script>
+    <script src="../scripts/sky.ts"></script>
     <script src="../scripts/reveal.ts"></script>
   </body>
 </html>

@@ -9,6 +9,10 @@ export const en: Dict = {
   },
   nav: { story: 'Story', work: 'Work', offline: 'Off the clock', contact: 'Contact', cv: 'CV' },
   langSwitch: { otherPath: '/', otherLabel: 'ES', ariaLabel: 'Cambiar a español' },
+  skymap: {
+    ariaLabel: 'Constellation map: each one leads to a section',
+    hint: 'Each constellation around the black hole opens a section.',
+  },
   hero: {
     kicker: 'Temuco → Paranal · Chile',
     name: 'Benjamín Salamanca',

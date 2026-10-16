@@ -1,0 +1,18 @@
+---
+import { constellations, shapeOf } from '../data/constellations';
+interface Props { k: 'osiris' | 'isis' | 'set' | 'cassiopeia'; class?: string }
+const { k, class: cls } = Astro.props;
+const shape = shapeOf(constellations.find((c) => c.key === k)!);
+const f = (v: number) => v.toFixed(3);
+---
+<svg class:list={['glyph', cls]} viewBox="-0.6 -0.6 1.2 1.2" aria-hidden="true">
+  {shape.lines.map(([a, b]) => (
+    <line x1={f(shape.points[a]!.x)} y1={f(shape.points[a]!.y)} x2={f(shape.points[b]!.x)} y2={f(shape.points[b]!.y)} />
+  ))}
+  {shape.highlight && (
+    <circle class="halo" cx={f(shape.points[shape.highlight]!.x)} cy={f(shape.points[shape.highlight]!.y)} r="0.12" />
+  )}
+  {Object.entries(shape.points).map(([id, p]) => (
+    <circle class:list={['star', { main: id === shape.highlight }]} cx={f(p.x)} cy={f(p.y)} r={f(p.r)} />
+  ))}
+</svg>

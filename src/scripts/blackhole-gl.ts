@@ -1,19 +1,26 @@
-// Agujero negro con lente gravitacional real: por cada pixel se integra la
-// trayectoria del rayo con acc = -1.5·h²·pos/r⁵ (geodésica nula aproximada,
-// Schwarzschild con r_s = 1). El disco emite en cada cruce del plano y=0.
-// Full-bleed: el canvas llena el hero; u_center compone el agujero y u_look
-// aplica parallax de cámara con el puntero. La posición vive en lens.ts para que
-// el campo de estrellas de fondo aplique la lente en el mismo lugar.
-import { layout } from './lens';
+// Agujero negro con lente gravitacional real: por cada pixel se integra la trayectoria del rayo
+// con acc = -1.5·h²·pos/r⁵ (geodésica nula aproximada, Schwarzschild con r_s = 1). El disco emite
+// en cada cruce del plano y=0. El fondo es el cielo real del sitio (el canvas del campo de
+// estrellas, subido como textura): cada rayo, ya desviado, se proyecta de vuelta a la pantalla y
+// lee el cielo ahí. Así aparecen el anillo de Einstein y las imágenes dobles de verdad.
+//
+// Lejos del agujero (parámetro de impacto b > 8) no se integra: se usa la deflexión de campo
+// débil α = 2·r_s / b. La lente se atenúa hacia el borde de la región para fundirse sin costura
+// con el campo de estrellas nítido que está debajo.
+import type { HoleState } from './lens';
 
-export function initBlackHoleGL(canvas: HTMLCanvasElement): boolean {
+export interface BlackHole {
+  resize(w: number, h: number): void;
+  draw(tSec: number, s: HoleState, sky: HTMLCanvasElement): void;
+}
+
+export function createBlackHoleGL(canvas: HTMLCanvasElement, reduced: boolean): BlackHole | null {
   const gl = canvas.getContext('webgl', { antialias: false, alpha: true, premultipliedAlpha: true });
-  if (!gl) return false;
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!gl) return null;
   const finePointer = window.matchMedia('(pointer: fine)').matches;
   const mobile = window.innerWidth < 720;
-  const STEPS = mobile ? 110 : 170;
-  const SCALE = Math.min(window.devicePixelRatio || 1, 1.5) * (mobile ? 0.6 : 0.55);
+  const STEPS = mobile ? 110 : 150;
+  const SCALE = Math.min(window.devicePixelRatio || 1, 1.5) * (mobile ? 0.6 : 0.75);
 
   const vsSrc = 'attribute vec2 p; void main(){ gl_Position = vec4(p, 0.0, 1.0); }';
   const fsSrc = `
@@ -23,24 +30,10 @@ uniform float u_time;
 uniform vec2 u_center;
 uniform vec2 u_look;
 uniform float u_zoom;
+uniform float u_fade;
+uniform sampler2D u_sky;
 #define STEPS ${STEPS}
-
-float hash(vec3 p) { p = fract(p * 0.3183099 + 0.1); p *= 17.0; return fract(p.x * p.y * p.z * (p.x + p.y + p.z)); }
-
-vec3 bgStars(vec3 rd) {
-  vec3 col = vec3(0.0);
-  for (int i = 0; i < 2; i++) {
-    float scale = i == 0 ? 60.0 : 130.0;
-    vec3 cell = floor(rd * scale);
-    float h = hash(cell);
-    if (h > 0.996) {
-      float b = fract(h * 901.37);
-      vec3 f = fract(rd * scale) - 0.5;
-      col += (0.25 + 0.75 * b) * smoothstep(0.35, 0.0, length(f)) * vec3(0.8 + 0.3 * b, 0.85, 1.0);
-    }
-  }
-  return col * 0.85;
-}
+#define REGION 1.05
 
 vec3 diskColor(vec3 pos, vec3 rd) {
   float r = length(pos.xz);
@@ -59,47 +52,69 @@ vec3 diskColor(vec3 pos, vec3 rd) {
 
 void main() {
   vec2 uv = (gl_FragCoord.xy - u_center * u_res) / u_res.y * u_zoom;
+  float rUv = length(uv);
+  if (rUv > REGION) { gl_FragColor = vec4(0.0); return; }
+
   vec3 ro = vec3(u_look.x * 3.0, 1.6 + u_look.y * 1.2, -20.0);
   vec3 fw = normalize(-ro);
   vec3 rt = normalize(cross(vec3(0.0, 1.0, 0.0), fw));
   vec3 up = cross(fw, rt);
   vec3 rd = normalize(fw * 1.2 + uv.x * rt + uv.y * up);
 
-  vec3 pos = ro;
-  vec3 vel = rd;
-  float h2 = dot(cross(pos, vel), cross(pos, vel));
+  // Punto de máximo acercamiento del rayo sin desviar
+  vec3 pc = ro + rd * dot(-ro, rd);
+  float b = length(pc);
 
   vec3 col = vec3(0.0);
   float glow = 0.0;
   bool captured = false;
+  vec3 dirOut;
 
-  for (int i = 0; i < STEPS; i++) {
-    float r = length(pos);
-    if (r < 1.0) { captured = true; break; }
-    if (r > 42.0) break;
-    float dt = 0.045 + 0.06 * clamp(r - 2.0, 0.0, 6.0);
-    vec3 prevPos = pos;
-    float prevY = pos.y;
-    vec3 acc = -1.5 * h2 * pos / pow(r, 5.0);
-    vel += acc * dt;
-    pos += vel * dt;
-    if (r < 8.0) glow += dt * 0.012 / (r * r * 0.5 + 0.3);
-    if (prevY * pos.y < 0.0) {
-      float k = prevY / (prevY - pos.y);
-      vec3 hit = mix(prevPos, pos, k);
-      float rr = length(hit.xz);
-      if (rr > 2.6 && rr < 7.0) col += diskColor(hit, normalize(vel)) * 0.6;
+  if (b > 8.0) {
+    dirOut = normalize(rd - normalize(pc) * (2.0 / b));
+  } else {
+    vec3 pos = ro;
+    vec3 vel = rd;
+    float h2 = dot(cross(pos, vel), cross(pos, vel));
+    for (int i = 0; i < STEPS; i++) {
+      float r = length(pos);
+      if (r < 1.0) { captured = true; break; }
+      if (r > 42.0) break;
+      float dt = 0.045 + 0.06 * clamp(r - 2.0, 0.0, 6.0);
+      vec3 prevPos = pos;
+      float prevY = pos.y;
+      vec3 acc = -1.5 * h2 * pos / pow(r, 5.0);
+      vel += acc * dt;
+      pos += vel * dt;
+      if (r < 8.0) glow += dt * 0.012 / (r * r * 0.5 + 0.3);
+      if (prevY * pos.y < 0.0) {
+        float k = prevY / (prevY - pos.y);
+        vec3 hit = mix(prevPos, pos, k);
+        float rr = length(hit.xz);
+        if (rr > 2.6 && rr < 7.0) col += diskColor(hit, normalize(vel)) * 0.6;
+      }
     }
+    dirOut = normalize(vel);
   }
-  if (!captured) col += bgStars(normalize(vel));
-  col += vec3(1.0, 0.72, 0.4) * glow * 1.1;
-  col = col / (1.0 + col);
-  col = pow(col, vec3(0.4545));
-  // Vignette centrado en el agujero: funde a transparente hacia los bordes
-  float vig = smoothstep(1.15, 0.6, length(uv));
-  col *= vig;
-  float alpha = clamp(max(max(col.r, col.g), col.b) * 1.6, 0.0, 1.0) * vig;
-  gl_FragColor = vec4(col, alpha);
+
+  // Cielo: proyecta la dirección final de vuelta a la pantalla y lee la textura ahí
+  vec3 sky = vec3(0.0);
+  if (!captured) {
+    float fz = dot(dirOut, fw);
+    vec2 uvd = vec2(dot(dirOut, rt), dot(dirOut, up)) * 1.2 / max(fz, 0.05);
+    float lensW = 1.0 - smoothstep(0.6, REGION, rUv);
+    vec2 uvs = mix(uv, uvd, lensW);
+    vec2 tc = (uvs / u_zoom * u_res.y + u_center * u_res) / u_res;
+    vec2 inside = step(vec2(0.0), tc) * step(tc, vec2(1.0));
+    sky = texture2D(u_sky, clamp(tc, 0.0, 1.0)).rgb * inside.x * inside.y * smoothstep(0.0, 0.25, fz);
+  }
+
+  // El halo solo existe en la zona integrada: se apaga antes de b = 8 para no dejar borde
+  vec3 lit = col + vec3(1.0, 0.72, 0.4) * glow * 1.1 * smoothstep(8.0, 5.0, b);
+  lit = lit / (1.0 + lit);
+  lit = pow(lit, vec3(0.4545));
+  float a = (1.0 - smoothstep(REGION * 0.85, REGION, rUv)) * u_fade;
+  gl_FragColor = vec4(min(sky + lit, 1.0) * a, a);
 }`;
 
   function compile(type: number, src: string): WebGLShader | null {
@@ -116,15 +131,15 @@ void main() {
 
   const vs = compile(gl.VERTEX_SHADER, vsSrc);
   const fs = compile(gl.FRAGMENT_SHADER, fsSrc);
-  if (!vs || !fs) return false;
+  if (!vs || !fs) return null;
   const prog = gl.createProgram();
-  if (!prog) return false;
+  if (!prog) return null;
   gl.attachShader(prog, vs);
   gl.attachShader(prog, fs);
   gl.linkProgram(prog);
   if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
     console.error(gl.getProgramInfoLog(prog));
-    return false;
+    return null;
   }
   gl.useProgram(prog);
 
@@ -140,6 +155,18 @@ void main() {
   const uCenter = gl.getUniformLocation(prog, 'u_center');
   const uLook = gl.getUniformLocation(prog, 'u_look');
   const uZoom = gl.getUniformLocation(prog, 'u_zoom');
+  const uFade = gl.getUniformLocation(prog, 'u_fade');
+
+  // Textura del cielo: copia reducida y opaca del campo de estrellas (fondo negro)
+  const tex = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, tex);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+  const skyCopy = document.createElement('canvas');
+  const skyCtx = skyCopy.getContext('2d')!;
 
   // Parallax: objetivo desde el puntero, aplicado con lerp por frame
   let lookX = 0, lookY = 0, targetX = 0, targetY = 0;
@@ -150,48 +177,32 @@ void main() {
     }, { passive: true });
   }
 
-  function resize() {
-    const cw = Math.max(1, canvas.clientWidth);
-    const ch = Math.max(1, canvas.clientHeight);
-    canvas.width = Math.max(1, Math.round(cw * SCALE));
-    canvas.height = Math.max(1, Math.round(ch * SCALE));
+  function resize(w: number, h: number) {
+    canvas.width = Math.max(1, Math.round(w * SCALE));
+    canvas.height = Math.max(1, Math.round(h * SCALE));
+    skyCopy.width = canvas.width;
+    skyCopy.height = canvas.height;
     gl!.viewport(0, 0, canvas.width, canvas.height);
     gl!.uniform2f(uRes, canvas.width, canvas.height);
-    const { cx, cy, zoom } = layout(window.innerWidth < 720);
-    gl!.uniform2f(uCenter, cx, 1 - cy); // GL tiene la y invertida
-    gl!.uniform1f(uZoom, zoom);
-    if (reduced) {
-      gl!.uniform2f(uLook, 0, 0);
-      gl!.uniform1f(uTime, 4.0);
-      gl!.drawArrays(gl!.TRIANGLES, 0, 3);
-    }
   }
 
-  let raf = 0, running = false;
-  const t0 = performance.now();
+  function draw(tSec: number, s: HoleState, sky: HTMLCanvasElement) {
+    skyCtx.fillStyle = '#000';
+    skyCtx.fillRect(0, 0, skyCopy.width, skyCopy.height);
+    skyCtx.drawImage(sky, 0, 0, skyCopy.width, skyCopy.height);
+    gl!.texImage2D(gl!.TEXTURE_2D, 0, gl!.RGBA, gl!.RGBA, gl!.UNSIGNED_BYTE, skyCopy);
 
-  function frame(now: number) {
     lookX += (targetX - lookX) * 0.05;
     lookY += (targetY - lookY) * 0.05;
     gl!.uniform2f(uLook, lookX, lookY);
-    gl!.uniform1f(uTime, (now - t0) / 1000);
+    gl!.uniform1f(uTime, tSec);
+    gl!.uniform2f(uCenter, s.cx, 1 - s.cy); // GL tiene la y invertida
+    gl!.uniform1f(uZoom, s.zoom);
+    gl!.uniform1f(uFade, s.opacity);
+    gl!.clearColor(0, 0, 0, 0);
+    gl!.clear(gl!.COLOR_BUFFER_BIT);
     gl!.drawArrays(gl!.TRIANGLES, 0, 3);
-    raf = requestAnimationFrame(frame);
   }
 
-  window.addEventListener('resize', resize);
-  resize();
-  if (reduced) return true;
-
-  const io = new IntersectionObserver(([e]) => {
-    const want = !!e && e.isIntersecting && !document.hidden;
-    if (want && !running) { running = true; raf = requestAnimationFrame(frame); }
-    if (!want && running) { running = false; cancelAnimationFrame(raf); }
-  });
-  io.observe(canvas);
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden && running) { running = false; cancelAnimationFrame(raf); }
-    else if (!document.hidden && !running) { running = true; raf = requestAnimationFrame(frame); }
-  });
-  return true;
+  return { resize, draw };
 }

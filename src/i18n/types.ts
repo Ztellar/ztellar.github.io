@@ -22,6 +22,7 @@ export interface Dict {
   meta: { title: string; description: string };
   nav: { story: string; work: string; offline: string; contact: string; cv: string };
   langSwitch: { otherPath: string; otherLabel: string; ariaLabel: string };
+  skymap: { ariaLabel: string; hint: string };
   hero: {
     kicker: string;
     name: string;

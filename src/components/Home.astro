@@ -5,11 +5,13 @@ import Story from './Story.astro';
 import Work from './Work.astro';
 import Offline from './Offline.astro';
 import Contact from './Contact.astro';
+import SkyMap from './SkyMap.astro';
 import type { Dict } from '../i18n';
 interface Props { dict: Dict }
 const { dict } = Astro.props;
 ---
 <Base dict={dict}>
+  <SkyMap dict={dict} />
   <Hero dict={dict} />
   <Story dict={dict} />
   <Work dict={dict} />

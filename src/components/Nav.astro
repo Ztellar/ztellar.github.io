@@ -1,4 +1,5 @@
 ---
+import ConstellationGlyph from './ConstellationGlyph.astro';
 import type { Dict } from '../i18n';
 interface Props { dict: Dict }
 const { dict } = Astro.props;
@@ -8,10 +9,10 @@ const base = dict.lang === 'en' ? '/en/' : '/';
   <nav aria-label="principal">
     <a class="brand mono" href={base}>~/ztellar</a>
     <div class="links">
-      <a href={`${base}#story`}>{dict.nav.story}</a>
-      <a href={`${base}#work`}>{dict.nav.work}</a>
-      <a href={`${base}#offline`}>{dict.nav.offline}</a>
-      <a href={`${base}#contact`}>{dict.nav.contact}</a>
+      <a href={`${base}#story`}><ConstellationGlyph k="osiris" class="icon" />{dict.nav.story}</a>
+      <a href={`${base}#work`}><ConstellationGlyph k="isis" class="icon" />{dict.nav.work}</a>
+      <a href={`${base}#offline`}><ConstellationGlyph k="set" class="icon" />{dict.nav.offline}</a>
+      <a href={`${base}#contact`}><ConstellationGlyph k="cassiopeia" class="icon" />{dict.nav.contact}</a>
       <a href="/cv/benjamin-salamanca-cv.pdf" download>{dict.nav.cv}</a>
       <a class="lang mono" href={dict.langSwitch.otherPath} aria-label={dict.langSwitch.ariaLabel}>{dict.langSwitch.otherLabel}</a>
     </div>
@@ -42,5 +43,11 @@ const base = dict.lang === 'en' ? '/en/' : '/';
     .links::-webkit-scrollbar { display: none; }
     .links a { white-space: nowrap; font-size: 0.88rem; }
   }
+  .links a { display: inline-flex; align-items: center; gap: 0.3rem; }
+  .links :global(.icon) { display: none; width: 1.1rem; height: 1.1rem; overflow: visible; }
+  .links :global(.icon line) { stroke: rgba(217, 192, 138, 0.7); stroke-width: 0.03; }
+  .links :global(.icon .star) { fill: #f3ead6; }
+  .links :global(.icon .halo) { fill: none; stroke: rgba(207, 227, 255, 0.6); stroke-width: 0.03; }
+  @media (max-width: 719px) { .links :global(.icon) { display: inline-block; } }
   .lang { border: 1px solid var(--line); border-radius: 6px; padding: 0.1rem 0.5rem; color: var(--accent-2); }
 </style>

@@ -1,10 +1,10 @@
-// Fallback canvas 2D del agujero negro (cuando WebGL no está disponible).
-// Full-bleed: dibuja en la misma posición relativa que el shader (u_center).
-import { layout } from './lens';
+// Fallback canvas 2D del agujero negro (cuando WebGL no está disponible). Usa el mismo estado
+// que el shader (lens.ts) para ubicarse; la lente del fondo la hace el campo de estrellas en CPU.
+import { SHADOW_UV, type HoleState } from './lens';
+import type { BlackHole } from './blackhole-gl';
 
-export function initBlackHole2D(canvas: HTMLCanvasElement) {
+export function createBlackHole2D(canvas: HTMLCanvasElement): BlackHole {
   const ctx = canvas.getContext('2d')!;
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   let W = 0, H = 0, CX = 0, CY = 0, R_EH = 0, R_PHOTON = 0;
 
@@ -17,26 +17,22 @@ export function initBlackHole2D(canvas: HTMLCanvasElement) {
   }));
   const TILT = 0.32;
 
-  function resize() {
-    W = Math.max(1, canvas.clientWidth);
-    H = Math.max(1, canvas.clientHeight);
+  function resize(w: number, h: number) {
+    W = w; H = h;
     canvas.width = W; canvas.height = H;
-    const { cx, cy } = layout(window.innerWidth < 720);
-    CX = W * cx;
-    CY = H * cy;
-    const S = Math.min(W, H);
-    R_EH = S * 0.11;
-    R_PHOTON = R_EH * 1.35;
-    if (reduced) draw(4000);
   }
 
-  let raf = 0, running = false;
-
-  function draw(t: number) {
+  function draw(tSec: number, s: HoleState) {
+    const t = tSec * 1000;
+    CX = s.cx * W;
+    CY = s.cy * H;
+    R_EH = (SHADOW_UV / s.zoom) * H * 0.8;
+    R_PHOTON = R_EH * 1.35;
+    canvas.style.opacity = String(s.opacity);
     ctx.clearRect(0, 0, W, H);
 
     // Glow ambiental
-    const glow = ctx.createRadialGradient(CX, CY, R_EH, CX, CY, Math.min(W, H) * 0.48);
+    const glow = ctx.createRadialGradient(CX, CY, R_EH, CX, CY, R_EH * 4.4);
     glow.addColorStop(0, 'rgba(255,158,79,0.18)');
     glow.addColorStop(1, 'rgba(255,158,79,0)');
     ctx.fillStyle = glow;
@@ -81,23 +77,5 @@ export function initBlackHole2D(canvas: HTMLCanvasElement) {
     ctx.fill();
   }
 
-  function loop(now: number) {
-    draw(now);
-    raf = requestAnimationFrame(loop);
-  }
-
-  window.addEventListener('resize', resize);
-  resize();
-  if (reduced) return;
-
-  const io = new IntersectionObserver(([e]) => {
-    const want = !!e && e.isIntersecting && !document.hidden;
-    if (want && !running) { running = true; raf = requestAnimationFrame(loop); }
-    if (!want && running) { running = false; cancelAnimationFrame(raf); }
-  });
-  io.observe(canvas);
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden && running) { running = false; cancelAnimationFrame(raf); }
-    else if (!document.hidden && !running) { running = true; raf = requestAnimationFrame(loop); }
-  });
+  return { resize, draw };
 }
