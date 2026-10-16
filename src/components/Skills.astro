@@ -7,12 +7,18 @@ const { dict } = Astro.props;
   <h2 data-obj="M45 · OPEN CLUSTER">{dict.skills.heading}</h2>
   <div class="grid">
     {dict.skills.groups.map((g) => (
-      <div class="card">
+      <div class="card reveal">
         <h3 class="mono">{g.label}</h3>
         <div>{g.items.map((s) => <span class="chip">{s}</span>)}</div>
       </div>
     ))}
   </div>
+  <h3 class="traits-heading mono">{dict.skills.traitsHeading}</h3>
+  <ul class="traits">
+    {dict.skills.traits.map((t) => (
+      <li class="reveal"><strong>{t.name}</strong><span>{t.evidence}</span></li>
+    ))}
+  </ul>
   <p class="edu">
     <span class="mono">{dict.education.heading}:</span>
     {dict.education.degree} — {dict.education.school} <span class="mono">({dict.education.period})</span>
@@ -22,5 +28,9 @@ const { dict } = Astro.props;
 <style>
   .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: 1.2rem; }
   h3 { color: var(--accent-2); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.08em; }
-  .edu { margin-top: 2rem; }
+  .traits-heading { margin-top: 3rem; }
+  .traits { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: 1rem 1.5rem; }
+  .traits li { display: grid; gap: 0.2rem; padding-left: 0.9rem; border-left: 2px solid var(--accent); }
+  .traits span { color: var(--ink-dim); font-size: 0.9rem; }
+  .edu { margin-top: 2.5rem; }
 </style>

@@ -5,7 +5,41 @@ const { dict } = Astro.props;
 ---
 <section id="about">
   <h2 data-obj="SOL · G2V">{dict.about.heading}</h2>
-  <p>{dict.about.p1}</p>
-  <p>{dict.about.p2}</p>
-  <p>{dict.about.p3}</p>
+  <div class="layout">
+    <div class="story">
+      {dict.about.paragraphs.map((p) => <p>{p}</p>)}
+    </div>
+    <aside class="card now reveal" aria-labelledby="now-heading">
+      <h3 id="now-heading" class="mono">
+        <span>{dict.about.nowHeading}</span>
+        <span class="updated">{dict.about.nowUpdated}</span>
+      </h3>
+      <ul>
+        {dict.about.now.map((n) => (
+          <li><span class="tag mono">{n.tag}</span><span>{n.text}</span></li>
+        ))}
+      </ul>
+    </aside>
+  </div>
 </section>
+
+<style>
+  .layout { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 2.5rem; align-items: start; }
+  .story p:first-child::first-letter {
+    float: left; font-family: var(--mono); font-size: 3.1rem; line-height: 0.9;
+    padding: 0.15rem 0.5rem 0 0; color: var(--accent);
+  }
+  .now { position: sticky; top: 5rem; }
+  .now h3 {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 0.5rem;
+    color: var(--accent-2); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .updated { font-size: 0.68rem; color: var(--ink-dim); text-transform: none; letter-spacing: 0; }
+  .now ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.9rem; }
+  .now li { display: grid; gap: 0.15rem; font-size: 0.92rem; color: var(--ink-dim); }
+  .tag { color: var(--accent); font-size: 0.74rem; }
+  @media (max-width: 760px) {
+    .layout { grid-template-columns: 1fr; }
+    .now { position: static; }
+  }
+</style>

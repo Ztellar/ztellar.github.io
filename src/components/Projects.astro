@@ -11,10 +11,11 @@ const { dict } = Astro.props;
     <p class="mono">{dict.projects.featured.context}</p>
     <p>{dict.projects.featured.description}</p>
     <div>{dict.projects.featured.stack.map((s) => <span class="chip">{s}</span>)}</div>
+    <p class="visit mono">{dict.projects.visit}</p>
   </a>
   <div class="grid">
     {dict.projects.items.map((p) => (
-      <article class="card">
+      <article class="card reveal">
         <h3>{p.name}</h3>
         <p class="mono">{p.context}</p>
         <p>{p.description}</p>
@@ -25,7 +26,7 @@ const { dict } = Astro.props;
 </section>
 
 <style>
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1.2rem; margin-top: 1.5rem; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); gap: 1.2rem; margin-top: 1.5rem; }
   h3 { color: var(--accent); font-size: 1.15rem; }
   a.featured {
     display: block;
@@ -41,4 +42,6 @@ const { dict } = Astro.props;
     border-color: var(--accent);
   }
   .featured h3 { font-size: 1.3rem; }
+  .visit { margin: 0.8rem 0 0; color: var(--accent); }
+  a.featured:hover .visit { text-decoration: underline; }
 </style>

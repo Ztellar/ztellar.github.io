@@ -7,10 +7,10 @@ const { dict } = Astro.props;
   <h2 data-obj="PSR B1919+21 · PULSAR">{dict.experience.heading}</h2>
   <ol class="timeline">
     {dict.experience.items.map((job) => (
-      <li>
+      <li class={job.current ? 'current reveal' : 'reveal'}>
         <div class="dot" aria-hidden="true"></div>
         <div class="card">
-          <p class="mono">{job.period}</p>
+          <p class="mono">{job.period}{job.current && <span class="badge">{dict.experience.currentLabel}</span>}</p>
           <h3>{job.role} · <span class="company">{job.company}</span></h3>
           <ul>{job.bullets.map((b) => <li>{b}</li>)}</ul>
           <div>{job.stack.map((s) => <span class="chip">{s}</span>)}</div>
@@ -31,6 +31,12 @@ const { dict } = Astro.props;
   .dot {
     position: absolute; left: 0; top: 0.9rem; width: 0.6rem; height: 0.6rem;
     border-radius: 50%; background: var(--accent-2); box-shadow: 0 0 8px var(--accent-2);
+  }
+  .current .dot { background: var(--accent); box-shadow: 0 0 12px var(--accent); }
+  .current .card { border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
+  .badge {
+    margin-left: 0.6rem; padding: 0.05rem 0.5rem; border-radius: 999px; font-size: 0.68rem;
+    color: #5dff9a; border: 1px solid rgba(93, 255, 154, 0.4); text-transform: uppercase; letter-spacing: 0.08em;
   }
   h3 { font-size: 1.1rem; }
   .company { color: var(--accent-2); }

@@ -14,11 +14,18 @@ const { dict } = Astro.props;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="theme-color" content="#000000" />
     <title>{dict.meta.title}</title>
+    <meta property="og:title" content={dict.meta.title} />
+    <meta property="og:description" content={dict.meta.description} />
+    <meta property="og:type" content="website" />
+    <link rel="alternate" hreflang="es" href="https://ztellar.github.io/" />
+    <link rel="alternate" hreflang="en" href="https://ztellar.github.io/en/" />
+    <script is:inline>document.documentElement.classList.add('js');</script>
   </head>
   <body>
     <canvas id="starfield" aria-hidden="true"></canvas>
     <Nav dict={dict} />
     <main><slot /></main>
     <script src="../scripts/starfield.ts"></script>
+    <script src="../scripts/reveal.ts"></script>
   </body>
 </html>

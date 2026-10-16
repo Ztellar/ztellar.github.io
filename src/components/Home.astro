@@ -2,9 +2,11 @@
 import Base from '../layouts/Base.astro';
 import Hero from './Hero.astro';
 import About from './About.astro';
+import Journey from './Journey.astro';
 import Experience from './Experience.astro';
 import Projects from './Projects.astro';
 import Skills from './Skills.astro';
+import Console from './Console.astro';
 import FooterContact from './FooterContact.astro';
 import type { Dict } from '../i18n';
 interface Props { dict: Dict }
@@ -13,8 +15,10 @@ const { dict } = Astro.props;
 <Base dict={dict}>
   <Hero dict={dict} />
   <About dict={dict} />
+  <Journey dict={dict} />
   <Experience dict={dict} />
   <Projects dict={dict} />
   <Skills dict={dict} />
+  <Console dict={dict} />
   <FooterContact dict={dict} />
 </Base>
