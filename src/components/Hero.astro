@@ -10,9 +10,6 @@ const { dict } = Astro.props;
     <div class="text">
       <p class="mono kicker">{dict.hero.kicker}</p>
       <h1>{dict.hero.name}</h1>
-      <p class="lead">
-        {dict.hero.lead.map((line) => <span>{line}</span>)}
-      </p>
       <p class="role mono">{dict.hero.role}</p>
       <div class="ctas">
         <a class="btn primary" href="#story">{dict.hero.ctaStory}</a>
@@ -37,10 +34,7 @@ const { dict } = Astro.props;
   .inner { width: 100%; max-width: 60rem; margin: 0 auto; padding: 0 1.5rem; position: relative; z-index: 1; }
   .text { max-width: 30rem; }
   h1 { font-size: clamp(2.2rem, 6vw, 3.6rem); text-shadow: 0 2px 24px rgba(0, 0, 0, 0.85); }
-  .lead { display: grid; gap: 0.15rem; font-size: 1.2rem; line-height: 1.45; text-shadow: 0 1px 14px rgba(0, 0, 0, 0.95); }
-  .lead span:nth-child(2) { color: var(--ink-dim); }
-  .lead span:last-child { color: var(--accent); }
-  .role { margin-top: 0.4rem; }
+  .role { margin-top: 0.4rem; font-size: 0.95rem; text-shadow: 0 1px 12px rgba(0, 0, 0, 0.9); }
   .ctas { display: flex; gap: 0.8rem; margin-top: 1.6rem; flex-wrap: wrap; }
   .caption {
     position: absolute; right: 1.5rem; bottom: 1.2rem; z-index: 1;
@@ -50,7 +44,6 @@ const { dict } = Astro.props;
     section { align-items: flex-end; }
     .inner { padding-bottom: 4.5rem; }
     .text { max-width: 100%; text-align: center; margin: 0 auto; }
-    .lead { font-size: 1.05rem; }
-    .ctas { justify-content: center; }
+      .ctas { justify-content: center; }
   }
 </style>

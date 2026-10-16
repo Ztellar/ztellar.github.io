@@ -25,7 +25,6 @@ export interface Dict {
   hero: {
     kicker: string;
     name: string;
-    lead: string[];
     role: string;
     ctaStory: string;
     ctaWork: string;

@@ -12,11 +12,6 @@ export const en: Dict = {
   hero: {
     kicker: 'Temuco → Paranal · Chile',
     name: 'Benjamín Salamanca',
-    lead: [
-      'I wanted to study Astronomy, but I couldn’t leave Temuco.',
-      'I went into Computer Science instead.',
-      'Today I’m interning at the Paranal Observatory.',
-    ],
     role: 'Full-stack developer · Computer Science Engineering, UFRO',
     ctaStory: 'Read the story',
     ctaWork: 'See my work',

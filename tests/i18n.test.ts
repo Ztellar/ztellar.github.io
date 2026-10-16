@@ -18,7 +18,6 @@ describe('i18n dictionaries', () => {
     expect(en.cv.experience.length).toBe(es.cv.experience.length);
     expect(en.work.others.length).toBe(es.work.others.length);
     expect(en.story.orbit.waypoints.length).toBe(es.story.orbit.waypoints.length);
-    expect(en.hero.lead.length).toBe(es.hero.lead.length);
     expect(en.story.paragraphs.length).toBe(es.story.paragraphs.length);
   });
 });
