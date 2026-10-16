@@ -1,0 +1,66 @@
+---
+// Diagrama de una transferencia de Hohmann: órbita interior (Temuco) → exterior (Paranal).
+// La elipse de transferencia tiene perigeo en la órbita interior y apogeo en la exterior.
+import type { Dict } from '../i18n';
+interface Props { orbit: Dict['story']['orbit'] }
+const { orbit } = Astro.props;
+
+const R1 = 62, R2 = 150;
+const a = (R1 + R2) / 2, b = Math.sqrt(R1 * R2), c = a - R1; // centro de la elipse en x = c
+// Hitos repartidos sobre la mitad superior de la elipse, de perigeo (izq.) a apogeo (der.)
+const n = orbit.waypoints.length;
+const points = orbit.waypoints.map((wp, i) => {
+  const th = Math.PI * (1 - i / (n - 1));
+  return { ...wp, n: i + 1, x: c + a * Math.cos(th), y: -b * Math.sin(th) };
+});
+const f = (v: number) => v.toFixed(1);
+---
+<figure class="orbit reveal">
+  <svg viewBox="-170 -168 340 186" role="img" aria-label={orbit.ariaLabel}>
+    <circle r="5" class="sun" />
+    <circle r={R1} class="ring" />
+    <circle r={R2} class="ring" />
+    <path class="transfer" pathLength="1" d={`M ${-R1} 0 A ${f(a)} ${f(b)} 0 0 1 ${R2} 0`} />
+    <circle cx={-R1} cy="0" r="4.5" class="home" />
+    <text x={-R1} y="15" class="place">{orbit.inner}</text>
+    <circle cx={R2} cy="0" r="5" class="dest" />
+    <text x={R2} y="15" class="place dest-label">{orbit.outer}</text>
+    {points.map((p) => (
+      <g class="wp">
+        <circle cx={f(p.x)} cy={f(p.y)} r="2.6" />
+        <text x={f(p.x * 1.1)} y={f(p.y * 1.1 - 4)}>{p.n}</text>
+      </g>
+    ))}
+  </svg>
+  <ol class="legend">
+    {points.map((p) => (
+      <li><span class="mono">{p.year}</span> {p.label}</li>
+    ))}
+  </ol>
+  <figcaption class="mono">{orbit.caption}</figcaption>
+</figure>
+
+<style>
+  .orbit { margin: 0; }
+  svg { width: 100%; height: auto; display: block; overflow: hidden; }
+  .sun { fill: #ffd27a; filter: drop-shadow(0 0 6px #ffb347); }
+  .ring { fill: none; stroke: rgba(154, 165, 189, 0.4); stroke-dasharray: 2 4; }
+  .transfer {
+    fill: none; stroke: var(--accent); stroke-width: 1.6;
+    stroke-dasharray: 1; stroke-dashoffset: 0;
+  }
+  :global(.js) .orbit.reveal .transfer { stroke-dashoffset: 1; transition: stroke-dashoffset 2.4s ease-in-out 0.2s; }
+  :global(.js) .orbit.reveal.in .transfer { stroke-dashoffset: 0; }
+  @media (prefers-reduced-motion: reduce) { :global(.js) .orbit.reveal .transfer { stroke-dashoffset: 0; } }
+  /* Punto azul pálido: Temuco, de donde sale la órbita */
+  .home { fill: #8fc8ff; filter: drop-shadow(0 0 5px #8fc8ff); }
+  .dest { fill: var(--accent); filter: drop-shadow(0 0 6px var(--accent)); }
+  .place { fill: var(--ink-dim); font: 10px var(--mono); text-anchor: middle; }
+  .dest-label { fill: var(--accent); }
+  .wp circle { fill: var(--ink); }
+  .wp text { fill: var(--accent-2); font: 11px var(--mono); text-anchor: middle; }
+  .legend { margin: 1.2rem 0 0; padding-left: 1.4rem; display: grid; gap: 0.3rem; font-size: 0.92rem; color: var(--ink-dim); }
+  .legend li::marker { color: var(--accent-2); font-family: var(--mono); font-size: 0.8rem; }
+  .legend .mono { color: var(--ink); }
+  figcaption { margin-top: 1rem; font-size: 0.78rem; line-height: 1.5; }
+</style>

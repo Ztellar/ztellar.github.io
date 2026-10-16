@@ -3,81 +3,93 @@ export interface ExperienceItem {
   company: string;
   period: string;
   bullets: string[];
-  stack: string[];
-  current?: boolean;
 }
 
-export interface ProjectItem {
-  name: string;
-  description: string;
-  context: string;
-  stack: string[];
-  url?: string;
-}
-
-export interface Stat {
-  value: string;
+export interface Waypoint {
+  year: string;
   label: string;
 }
 
-export interface NowItem {
-  tag: string;
+export interface OtherWork {
+  name: string;
+  org: string;
+  period: string;
   text: string;
-}
-
-export interface Milestone {
-  year: string;
-  title: string;
-  text: string;
-  /** Tipo de hito: define el color del nodo en la trayectoria. */
-  kind: 'edu' | 'teach' | 'work' | 'build' | 'space';
-}
-
-export interface ConsoleCommand {
-  cmd: string;
-  output: string[];
 }
 
 export interface Dict {
   lang: 'es' | 'en';
   meta: { title: string; description: string };
-  nav: { about: string; journey: string; experience: string; projects: string; skills: string; contact: string };
+  nav: { story: string; work: string; offline: string; contact: string; cv: string };
   langSwitch: { otherPath: string; otherLabel: string; ariaLabel: string };
   hero: {
     kicker: string;
-    localTime: string;
     name: string;
-    title: string;
-    tagline: string;
-    now: string;
-    ctaProjects: string;
-    ctaContact: string;
-    stats: Stat[];
+    lead: string[];
+    role: string;
+    ctaStory: string;
+    ctaWork: string;
   };
-  about: {
+  story: {
     heading: string;
     paragraphs: string[];
-    nowHeading: string;
-    nowUpdated: string;
-    now: NowItem[];
+    orbit: {
+      ariaLabel: string;
+      inner: string;
+      outer: string;
+      /** Hitos a lo largo de la transferencia, en orden: del origen (Temuco) al destino (Paranal). */
+      waypoints: Waypoint[];
+      caption: string;
+    };
   };
-  journey: { heading: string; intro: string; items: Milestone[] };
-  experience: { heading: string; currentLabel: string; items: ExperienceItem[] };
-  projects: { heading: string; privateNote: string; visit: string; featured: ProjectItem; items: ProjectItem[] };
-  skills: {
-    heading: string;
-    groups: { label: string; items: string[] }[];
-    traitsHeading: string;
-    traits: { name: string; evidence: string }[];
-  };
-  console: {
+  work: {
     heading: string;
     intro: string;
-    hint: string;
-    placeholder: string;
-    notFound: string;
-    commands: ConsoleCommand[];
+    featured: {
+      name: string;
+      tagline: string;
+      context: string;
+      originHeading: string;
+      origin: string[];
+      whatHeading: string;
+      what: string[];
+      stack: string[];
+      url: string;
+      visit: string;
+    };
+    eso: { name: string; context: string; text: string[]; stack: string[] };
+    othersHeading: string;
+    others: OtherWork[];
+    stackHeading: string;
+    stack: string[];
+    cvNote: string;
   };
-  education: { heading: string; degree: string; school: string; period: string };
-  footer: { heading: string; blurb: string; email: string; github: string; linkedin: string; cv: string; builtWith: string };
+  offline: {
+    heading: string;
+    intro: string;
+    music: {
+      heading: string;
+      text: string;
+      favoriteLabel: string;
+      favorite: string;
+      groups: { label: string; items: string[] }[];
+      aside: string;
+    };
+    bass: { heading: string; text: string };
+    ygo: { heading: string; deck: string; text: string };
+    travel: { heading: string; text: string };
+  };
+  contact: { heading: string; blurb: string; email: string; github: string; linkedin: string; cv: string; builtWith: string };
+  /** Datos solo para la página /cv (el CV sanitizado que se imprime a PDF). */
+  cv: {
+    title: string;
+    summary: string;
+    location: string;
+    experienceHeading: string;
+    experience: ExperienceItem[];
+    skillsHeading: string;
+    skills: { label: string; items: string[] }[];
+    educationHeading: string;
+    education: { degree: string; school: string; period: string };
+  };
 }

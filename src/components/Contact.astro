@@ -1,0 +1,21 @@
+---
+import type { Dict } from '../i18n';
+interface Props { dict: Dict }
+const { dict } = Astro.props;
+---
+<section id="contact">
+  <h2 data-obj="VOYAGER 1 · INTERSTELLAR">{dict.contact.heading}</h2>
+  <p>{dict.contact.blurb}</p>
+  <div class="links">
+    <a class="btn" href={`mailto:${dict.contact.email}`}>{dict.contact.email}</a>
+    <a class="btn" href={dict.contact.github} rel="me noopener">GitHub</a>
+    <a class="btn" href={dict.contact.linkedin} rel="me noopener">LinkedIn</a>
+    <a class="btn" href="/cv/benjamin-salamanca-cv.pdf" download>{dict.contact.cv}</a>
+  </div>
+  <footer class="mono">{dict.contact.builtWith}</footer>
+</section>
+
+<style>
+  .links { display: flex; gap: 0.8rem; flex-wrap: wrap; margin: 1.5rem 0 3rem; }
+  footer { padding-bottom: 2rem; color: var(--ink-dim); }
+</style>

@@ -2,7 +2,10 @@
 // trayectoria del rayo con acc = -1.5·h²·pos/r⁵ (geodésica nula aproximada,
 // Schwarzschild con r_s = 1). El disco emite en cada cruce del plano y=0.
 // Full-bleed: el canvas llena el hero; u_center compone el agujero y u_look
-// aplica parallax de cámara con el puntero.
+// aplica parallax de cámara con el puntero. La posición vive en lens.ts para que
+// el campo de estrellas de fondo aplique la lente en el mismo lugar.
+import { layout } from './lens';
+
 export function initBlackHoleGL(canvas: HTMLCanvasElement): boolean {
   const gl = canvas.getContext('webgl', { antialias: false, alpha: true, premultipliedAlpha: true });
   if (!gl) return false;
@@ -154,9 +157,9 @@ void main() {
     canvas.height = Math.max(1, Math.round(ch * SCALE));
     gl!.viewport(0, 0, canvas.width, canvas.height);
     gl!.uniform2f(uRes, canvas.width, canvas.height);
-    const narrow = window.innerWidth < 720;
-    gl!.uniform2f(uCenter, narrow ? 0.5 : 0.66, narrow ? 0.58 : 0.5); // GL y invertida: 0.58 ≈ 42% desde arriba
-    gl!.uniform1f(uZoom, narrow ? 1.35 : 1.0);
+    const { cx, cy, zoom } = layout(window.innerWidth < 720);
+    gl!.uniform2f(uCenter, cx, 1 - cy); // GL tiene la y invertida
+    gl!.uniform1f(uZoom, zoom);
     if (reduced) {
       gl!.uniform2f(uLook, 0, 0);
       gl!.uniform1f(uTime, 4.0);

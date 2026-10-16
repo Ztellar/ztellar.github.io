@@ -1,5 +1,7 @@
 // Fallback canvas 2D del agujero negro (cuando WebGL no está disponible).
 // Full-bleed: dibuja en la misma posición relativa que el shader (u_center).
+import { layout } from './lens';
+
 export function initBlackHole2D(canvas: HTMLCanvasElement) {
   const ctx = canvas.getContext('2d')!;
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -19,9 +21,9 @@ export function initBlackHole2D(canvas: HTMLCanvasElement) {
     W = Math.max(1, canvas.clientWidth);
     H = Math.max(1, canvas.clientHeight);
     canvas.width = W; canvas.height = H;
-    const narrow = window.innerWidth < 720;
-    CX = W * (narrow ? 0.5 : 0.62);
-    CY = H * (narrow ? 0.42 : 0.5);
+    const { cx, cy } = layout(window.innerWidth < 720);
+    CX = W * cx;
+    CY = H * cy;
     const S = Math.min(W, H);
     R_EH = S * 0.11;
     R_PHOTON = R_EH * 1.35;

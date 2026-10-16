@@ -1,0 +1,28 @@
+---
+import Orbit from './Orbit.astro';
+import type { Dict } from '../i18n';
+interface Props { dict: Dict }
+const { dict } = Astro.props;
+---
+<section id="story">
+  <h2 data-obj="HOHMANN · Δv MÍNIMO">{dict.story.heading}</h2>
+  <div class="layout">
+    <div class="text">
+      {dict.story.paragraphs.map((p) => <p>{p}</p>)}
+    </div>
+    <div class="card figure">
+      <Orbit orbit={dict.story.orbit} />
+    </div>
+  </div>
+</section>
+
+<style>
+  .layout { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 2.5rem; align-items: start; }
+  .text p { font-size: 1.05rem; }
+  .text p:last-child { color: var(--ink); }
+  .figure { position: sticky; top: 5rem; }
+  @media (max-width: 820px) {
+    .layout { grid-template-columns: 1fr; }
+    .figure { position: static; }
+  }
+</style>

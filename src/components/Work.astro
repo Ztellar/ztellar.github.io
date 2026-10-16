@@ -1,0 +1,78 @@
+---
+import type { Dict } from '../i18n';
+interface Props { dict: Dict }
+const { dict } = Astro.props;
+const w = dict.work;
+const f = w.featured;
+---
+<section id="work">
+  <h2 data-obj="M42 · STELLAR NURSERY">{w.heading}</h2>
+  <p>{w.intro}</p>
+
+  <article class="card featured reveal">
+    <header>
+      <div>
+        <h3>{f.name}</h3>
+        <p class="tagline">{f.tagline}</p>
+        <p class="mono">{f.context}</p>
+      </div>
+      <a class="btn" href={f.url} target="_blank" rel="noopener noreferrer">{f.visit}</a>
+    </header>
+    <div class="cols">
+      <div>
+        <h4 class="mono">{f.originHeading}</h4>
+        {f.origin.map((p) => <p>{p}</p>)}
+      </div>
+      <div>
+        <h4 class="mono">{f.whatHeading}</h4>
+        <ul>{f.what.map((x) => <li>{x}</li>)}</ul>
+      </div>
+    </div>
+    <div>{f.stack.map((s) => <span class="chip">{s}</span>)}</div>
+  </article>
+
+  <article class="card eso reveal">
+    <h3>{w.eso.name}</h3>
+    <p class="mono">{w.eso.context}</p>
+    <ul>{w.eso.text.map((x) => <li>{x}</li>)}</ul>
+    <div>{w.eso.stack.map((s) => <span class="chip">{s}</span>)}</div>
+  </article>
+
+  <h3 class="sub mono">{w.othersHeading}</h3>
+  <ul class="others">
+    {w.others.map((o) => (
+      <li class="reveal">
+        <p class="mono">{o.org} · {o.period}</p>
+        <h4>{o.name}</h4>
+        <p class="desc">{o.text}</p>
+      </li>
+    ))}
+  </ul>
+
+  <h3 class="sub mono">{w.stackHeading}</h3>
+  <div class="stack">{w.stack.map((s) => <span class="chip">{s}</span>)}</div>
+  <p class="cv"><a href="/cv/benjamin-salamanca-cv.pdf" download>{w.cvNote} ↓</a></p>
+</section>
+
+<style>
+  h3 { color: var(--accent); font-size: 1.3rem; margin-bottom: 0.4rem; }
+  h4 { font-size: 1rem; margin: 0 0 0.5rem; }
+  .featured { margin-top: 1.5rem; border-color: color-mix(in srgb, var(--accent) 50%, transparent); box-shadow: 0 0 32px rgba(255, 158, 79, 0.1); }
+  .featured header { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.2rem; }
+  .featured header .btn { white-space: nowrap; }
+  .tagline { font-size: 1.1rem; margin-bottom: 0.3rem; }
+  .cols { display: grid; grid-template-columns: 1.3fr 1fr; gap: 2rem; margin-bottom: 1rem; }
+  .cols h4 { color: var(--accent-2); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.1em; }
+  .cols p, .cols li { color: var(--ink-dim); font-size: 0.95rem; }
+  ul { margin: 0 0 1rem; padding-left: 1.2rem; }
+  .eso { margin-top: 1.2rem; }
+  .eso h3 { color: var(--accent-2); font-size: 1.15rem; }
+  .eso ul { color: var(--ink-dim); margin-top: 0.6rem; }
+  .sub { color: var(--accent-2); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 3rem; }
+  .others { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: 1.5rem; }
+  .others li { border-left: 1px solid var(--line); padding-left: 1rem; }
+  .others .mono { margin-bottom: 0.3rem; font-size: 0.75rem; }
+  .desc { color: var(--ink-dim); font-size: 0.92rem; }
+  .cv { margin-top: 1rem; }
+  @media (max-width: 720px) { .cols { grid-template-columns: 1fr; gap: 0.5rem; } }
+</style>

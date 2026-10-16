@@ -13,7 +13,10 @@ Portfolio one-page bilingüe con tema espacial. Astro 5 estático, GitHub Pages.
 - `src/i18n/{es,en}.ts` — TODO texto visible vive aquí; nunca hardcodear texto en componentes. Ambos diccionarios deben tener claves idénticas (hay test).
 - `src/scripts/starfield.ts` — canvas de fondo con estrellas reales (src/data/stars.json, precomputado en build con posición proyectada, magnitud y color por tipo espectral).
 - `src/scripts/blackhole.ts` — agujero negro animado del hero (canvas 2D, sin WebGL).
-- `src/components/Console.astro` — terminal interactiva; comandos y salidas viven en `console.commands` del diccionario.
+- Concepto: "órbita de transferencia" (quería estudiar Astronomía, terminó en Informática, hoy en Paranal). El portfolio cuenta la historia; el detalle de cargos vive solo en `/cv` (`dict.cv`).
+- `src/scripts/lens.ts` — geometría compartida del agujero negro (posición, sombra, radio de Einstein). `blackhole-gl.ts` la usa para ubicarse y `starfield.ts` para aplicar lente gravitacional al fondo (imágenes desplazadas y estiradas tangencialmente).
+- `src/data/constellations.ts` — constelaciones egipcias (Sah/Osiris, Sopdet/Isis, Meskhetyu/Set) como índices de stars.json; hay test que los verifica contra AR/Dec.
+- `src/components/StageArt.astro` — ilustración SVG inspirada (no copiada) en la portada de The Stage: punto azul pálido, niebla verde, rayos.
 - `src/scripts/reveal.ts` — aparición al hacer scroll para elementos `.reveal` (solo con JS y sin reduced-motion).
 - `public/cv/benjamin-salamanca-cv.pdf` se genera imprimiendo `/cv` a PDF (Playwright/navegador) tras cambiar los diccionarios.
 - Animaciones: pausar fuera de viewport / pestaña oculta; con `prefers-reduced-motion` dibujar un solo frame.

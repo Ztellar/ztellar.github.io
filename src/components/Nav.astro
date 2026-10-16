@@ -8,12 +8,11 @@ const base = dict.lang === 'en' ? '/en/' : '/';
   <nav aria-label="principal">
     <a class="brand mono" href={base}>~/ztellar</a>
     <div class="links">
-      <a href={`${base}#about`}>{dict.nav.about}</a>
-      <a href={`${base}#journey`}>{dict.nav.journey}</a>
-      <a href={`${base}#experience`}>{dict.nav.experience}</a>
-      <a href={`${base}#projects`}>{dict.nav.projects}</a>
-      <a href={`${base}#skills`}>{dict.nav.skills}</a>
+      <a href={`${base}#story`}>{dict.nav.story}</a>
+      <a href={`${base}#work`}>{dict.nav.work}</a>
+      <a href={`${base}#offline`}>{dict.nav.offline}</a>
       <a href={`${base}#contact`}>{dict.nav.contact}</a>
+      <a href="/cv/benjamin-salamanca-cv.pdf" download>{dict.nav.cv}</a>
       <a class="lang mono" href={dict.langSwitch.otherPath} aria-label={dict.langSwitch.ariaLabel}>{dict.langSwitch.otherLabel}</a>
     </div>
   </nav>

@@ -14,8 +14,11 @@ describe('i18n dictionaries', () => {
   it('es and en have identical key structure', () => {
     expect(keyPaths(en).sort()).toEqual(keyPaths(es).sort());
   });
-  it('experience and projects have same item counts', () => {
-    expect(en.experience.items.length).toBe(es.experience.items.length);
-    expect(en.projects.items.length).toBe(es.projects.items.length);
+  it('lists have the same item counts', () => {
+    expect(en.cv.experience.length).toBe(es.cv.experience.length);
+    expect(en.work.others.length).toBe(es.work.others.length);
+    expect(en.story.orbit.waypoints.length).toBe(es.story.orbit.waypoints.length);
+    expect(en.hero.lead.length).toBe(es.hero.lead.length);
+    expect(en.story.paragraphs.length).toBe(es.story.paragraphs.length);
   });
 });
