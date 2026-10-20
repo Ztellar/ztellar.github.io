@@ -18,10 +18,18 @@ const base = dict.lang === 'en' ? '/en/' : '/';
     </div>
   </nav>
 </header>
+<!-- Cuando la barra está oculta (las constelaciones hacen de menú), CV e idioma quedan en la esquina -->
+<div class="corner">
+  <a class="mono" href="/cv/benjamin-salamanca-cv.pdf" download>{dict.nav.cv}</a>
+  <a class="lang mono" href={dict.langSwitch.otherPath} aria-label={dict.langSwitch.ariaLabel}>{dict.langSwitch.otherLabel}</a>
+</div>
 
 <style>
+  /* La barra solo aparece donde no hay mapa de constelaciones: sky.ts pone `nav-on` en <html>
+     (móvil siempre; escritorio angosto al dejar el hero). Sin JS, siempre visible. */
   header {
-    position: sticky; top: 0; z-index: 10;
+    position: fixed; top: 0; left: 0; right: 0; z-index: 10;
+    transition: transform 0.35s ease, opacity 0.35s ease;
     background: color-mix(in srgb, var(--bg) 78%, transparent);
     backdrop-filter: blur(8px);
     border-bottom: 1px solid var(--line);
@@ -30,6 +38,15 @@ const base = dict.lang === 'en' ? '/en/' : '/';
     max-width: 60rem; margin: 0 auto; padding: 0.8rem 1.5rem;
     display: flex; justify-content: space-between; align-items: center; gap: 1rem;
   }
+  :global(.js:not(.nav-on)) header { transform: translateY(-100%); opacity: 0; pointer-events: none; }
+  .corner {
+    position: fixed; top: 1rem; right: 1.25rem; z-index: 10;
+    display: flex; gap: 0.6rem; align-items: center;
+    transition: opacity 0.35s ease;
+  }
+  .corner a { color: var(--ink-dim); text-decoration: none; font-size: 0.8rem; }
+  .corner a:hover { color: var(--ink); }
+  :global(html:not(.js)) .corner, :global(.nav-on) .corner { opacity: 0; pointer-events: none; }
   .brand { color: var(--accent); text-decoration: none; }
   .links { display: flex; gap: 1.1rem; flex-wrap: wrap; }
   .links a { color: var(--ink-dim); text-decoration: none; font-size: 0.95rem; }

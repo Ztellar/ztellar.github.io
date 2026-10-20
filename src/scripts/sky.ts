@@ -16,14 +16,13 @@ if (starCanvas && holeCanvas) {
   const gl = createBlackHoleGL(holeCanvas, reduced);
   const hole: BlackHole = gl ?? createBlackHole2D(holeCanvas);
   const map = createSkyMap();
-  const header = document.querySelector('header');
   const hero = document.getElementById('hero');
 
   const vp: Viewport = { scrollY: 0, w: 0, h: 0, navH: 0, heroH: 0 };
   function measure() {
     vp.w = window.innerWidth;
     vp.h = window.innerHeight;
-    vp.navH = header?.offsetHeight ?? 0;
+    vp.navH = 0; // la barra es fija y flota sobre el hero: no lo desplaza
     vp.heroH = hero?.offsetHeight ?? vp.h;
     stars.resize(vp.w, vp.h);
     hole.resize(vp.w, vp.h);
@@ -43,6 +42,8 @@ if (starCanvas && holeCanvas) {
     holeCanvas!.style.visibility = visible ? 'visible' : 'hidden';
     if (visible) hole.draw(reduced ? 4 : t / 1000, s, starCanvas!);
     map?.update(s, vp);
+    // La barra de navegación solo hace falta donde no se ven las constelaciones
+    document.documentElement.classList.toggle('nav-on', vp.w < 720 || (!s.rail && s.opacity < 0.3));
   }
 
   measure();
