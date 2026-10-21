@@ -66,7 +66,6 @@ void main() {
   float b = length(pc);
 
   vec3 col = vec3(0.0);
-  float glow = 0.0;
   bool captured = false;
   vec3 dirOut;
 
@@ -86,7 +85,6 @@ void main() {
       vec3 acc = -1.5 * h2 * pos / pow(r, 5.0);
       vel += acc * dt;
       pos += vel * dt;
-      if (r < 8.0) glow += dt * 0.012 / (r * r * 0.5 + 0.3);
       if (prevY * pos.y < 0.0) {
         float k = prevY / (prevY - pos.y);
         vec3 hit = mix(prevPos, pos, k);
@@ -109,8 +107,7 @@ void main() {
     sky = texture2D(u_sky, clamp(tc, 0.0, 1.0)).rgb * inside.x * inside.y * smoothstep(0.0, 0.25, fz);
   }
 
-  // El halo solo existe en la zona integrada: se apaga antes de b = 8 para no dejar borde
-  vec3 lit = col + vec3(1.0, 0.72, 0.4) * glow * 1.1 * smoothstep(8.0, 5.0, b);
+  vec3 lit = col;
   lit = lit / (1.0 + lit);
   lit = pow(lit, vec3(0.4545));
   float a = (1.0 - smoothstep(REGION * 0.85, REGION, rUv)) * u_fade;

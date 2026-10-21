@@ -102,7 +102,7 @@ export const en: Dict = {
   },
   offline: {
     heading: 'Off the clock',
-    intro: 'What fills the rest of the time.',
+    intro: 'What I do when I’m not coding.',
     music: {
       heading: 'Music',
       text: 'I listen to a lot of music, almost always rock, metal or jazz fusion.',
@@ -112,20 +112,19 @@ export const en: Dict = {
         { label: 'Metal', items: ['Mastodon', 'Gojira', 'Megadeth', 'Ghost', 'Symphony X', 'Nightwish'] },
         { label: 'Japanese fusion & city pop', items: ['Casiopea', 'Masayoshi Takanaka', 'ryusenkei'] },
       ],
-      aside: 'Yes, Cassiopeia is also a constellation.',
     },
     bass: {
       heading: 'Bass',
-      text: 'I play bass. With my former bands we didn’t just play: we also organized our own shows, which is part of where Spot Ticket came from.',
+      text: 'I play bass. With my former bands we also organized our own shows, and that’s part of where the idea for Spot Ticket came from.',
     },
     ygo: {
       heading: 'Yu-Gi-Oh!',
       deck: 'Kozmo',
-      text: 'My favorite deck: pilots and starships from a space opera. Even in card games I end up in space.',
+      text: 'My favorite deck. I like it because it combines Star Wars with The Wizard of Oz.',
     },
     travel: {
       heading: 'Travel',
-      text: 'I enjoy traveling and getting to know new places.',
+      text: 'I like traveling and getting to know new places.',
     },
   },
   contact: {

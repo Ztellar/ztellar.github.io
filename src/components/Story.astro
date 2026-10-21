@@ -5,7 +5,7 @@ interface Props { dict: Dict }
 const { dict } = Astro.props;
 ---
 <section id="story">
-  <h2 data-obj="HOHMANN · Δv MÍNIMO">{dict.story.heading}</h2>
+  <h2>{dict.story.heading}</h2>
   <div class="layout">
     <div class="text">
       {dict.story.paragraphs.map((p) => <p>{p}</p>)}

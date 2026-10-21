@@ -31,13 +31,6 @@ export function createBlackHole2D(canvas: HTMLCanvasElement): BlackHole {
     canvas.style.opacity = String(s.opacity);
     ctx.clearRect(0, 0, W, H);
 
-    // Glow ambiental
-    const glow = ctx.createRadialGradient(CX, CY, R_EH, CX, CY, R_EH * 4.4);
-    glow.addColorStop(0, 'rgba(255,158,79,0.18)');
-    glow.addColorStop(1, 'rgba(255,158,79,0)');
-    ctx.fillStyle = glow;
-    ctx.fillRect(0, 0, W, H);
-
     // Disco de acreción: mitad trasera se dibuja "lenteada" por encima del horizonte
     ctx.globalCompositeOperation = 'lighter';
     for (const p of parts) {

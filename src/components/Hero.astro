@@ -16,7 +16,6 @@ const { dict } = Astro.props;
       <p class="hint mono">✦ {dict.skymap.hint}</p>
     </div>
   </div>
-  <p class="caption mono" aria-hidden="true">Sgr A* · 17h 45m 40s · −29° 00′ 28″</p>
 </section>
 
 <style>
@@ -36,10 +35,6 @@ const { dict } = Astro.props;
   .role { margin-top: 0.4rem; font-size: 0.95rem; text-shadow: 0 1px 12px rgba(0, 0, 0, 0.9); }
   .ctas { display: flex; gap: 0.8rem; margin-top: 1.6rem; flex-wrap: wrap; }
   .hint { margin-top: 1.4rem; font-size: 0.75rem; opacity: 0.8; }
-  .caption {
-    position: absolute; left: max(1.5rem, calc(50% - 30rem + 1.5rem)); bottom: 1.2rem; z-index: 1;
-    font-size: 0.72rem; letter-spacing: 0.12em; opacity: 0.75;
-  }
   @media (max-width: 720px) {
     section { align-items: flex-end; }
     .inner { padding-bottom: 4.5rem; }

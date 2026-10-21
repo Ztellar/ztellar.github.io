@@ -73,7 +73,6 @@ export interface Dict {
       favoriteLabel: string;
       favorite: string;
       groups: { label: string; items: string[] }[];
-      aside: string;
     };
     bass: { heading: string; text: string };
     ygo: { heading: string; deck: string; text: string };

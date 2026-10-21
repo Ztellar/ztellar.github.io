@@ -50,15 +50,6 @@ section:first-of-type { border-top: none; }
 h1, h2, h3 { line-height: 1.2; margin: 0 0 1rem; }
 h1, h2 { font-family: var(--mono); letter-spacing: -0.02em; }
 h2 { font-size: 1.6rem; }
-h2[data-obj]::before {
-  content: attr(data-obj);
-  display: block;
-  font-size: 0.72rem;
-  font-weight: 400;
-  letter-spacing: 0.16em;
-  color: var(--accent);
-  margin-bottom: 0.5rem;
-}
 p { margin: 0 0 1rem; max-width: 46rem; }
 a { color: var(--accent-2); }
 
